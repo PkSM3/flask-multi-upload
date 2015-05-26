@@ -6,9 +6,10 @@ from uuid import uuid4
 
 app = Flask(__name__)
 
-#app.TWJSrealmainpath = "/home/pksm3/www"
-#app.TWJSlocalpath = "/i7/CNRS/"
-#app.TWJSdata = "data"
+# app.TWJSrealmainpath = "/home/pksm3/www"
+# app.TWJSlocalpath = "/i7/CNRS/"
+# app.TWJSdata = "data"
+# app.serverpath = "http://localhost"
 
 app.TWJSrealmainpath = "/var/www"
 app.TWJSlocalpath = "/CNRSdemo"
