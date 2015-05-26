@@ -5,10 +5,15 @@ import glob
 from uuid import uuid4
 
 app = Flask(__name__)
-app.TWJSrealmainpath = "/home/pksm3/www"
-app.TWJSlocalpath = "/i7/CNRS/"
-app.TWJSdata = "data"
 
+#app.TWJSrealmainpath = "/home/pksm3/www"
+#app.TWJSlocalpath = "/i7/CNRS/"
+#app.TWJSdata = "data"
+
+app.TWJSrealmainpath = "/var/www"
+app.TWJSlocalpath = "/CNRSdemo"
+app.TWJSdata = "data"
+app.serverpath = "http://tina.iscpif.fr"
 
 @app.route("/")
 def index():
@@ -38,7 +43,7 @@ def upload():
 
     # Target folder for these uploads.
 
-    twjspath = app.TWJSrealmainpath+app.TWJSlocalpath+app.TWJSdata
+    twjspath = app.TWJSrealmainpath+app.TWJSlocalpath+"/"+app.TWJSdata
     target = twjspath+"/{}".format(upload_key)
     try:
         os.mkdir(target)
@@ -77,7 +82,7 @@ def upload_complete(uuid):
     """The location we send them to at the end of the upload."""
 
     # Get their files.
-    twjspath = app.TWJSrealmainpath+app.TWJSlocalpath+app.TWJSdata
+    twjspath = app.TWJSrealmainpath+app.TWJSlocalpath+"/"+app.TWJSdata
     root = twjspath+"/{}".format(uuid)
     if not os.path.isdir(root):
         return "Error: UUID not found!"
@@ -101,7 +106,7 @@ def upload_complete(uuid):
         uuid=uuid,
         files=files,
         path=folder_file,
-        url=("http://localhost"+app.TWJSlocalpath),
+        url=(app.serverpath+app.TWJSlocalpath),
     )
 
 
