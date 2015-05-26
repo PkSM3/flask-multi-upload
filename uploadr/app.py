@@ -5,12 +5,23 @@ import glob
 from uuid import uuid4
 
 app = Flask(__name__)
+app.TWJSrealmainpath = "/home/pksm3/www"
+app.TWJSlocalpath = "/i7/CNRS/"
+app.TWJSdata = "data"
 
 
 @app.route("/")
 def index():
     return render_template("index.html")
 
+
+@app.route("/trial")
+def trial():
+    from uploadr.phylo_gexf2json import PhyloGen
+    # print "printing: "+PhyloGen.something()
+    instance = PhyloGen()
+    returnvar = instance.something()
+    return render_template("trial.html")
 
 @app.route("/upload", methods=["POST"])
 def upload():
@@ -26,7 +37,9 @@ def upload():
         is_ajax = True
 
     # Target folder for these uploads.
-    target = "uploadr/static/uploads/{}".format(upload_key)
+
+    twjspath = app.TWJSrealmainpath+app.TWJSlocalpath+app.TWJSdata
+    target = twjspath+"/{}".format(upload_key)
     try:
         os.mkdir(target)
     except:
@@ -45,7 +58,14 @@ def upload():
         print "Accept incoming file:", filename
         print "Save it to:", destination
         upload.save(destination)
+        from uploadr.phylo_gexf2json import PhyloGen
+        phylolayout = PhyloGen()
+        returnvar = phylolayout.process(destination)
+        print "\tjson guardado en:"
+        print "\t"+returnvar
+        print " - - - -"
 
+    # return ajax_response(True, upload_key)
     if is_ajax:
         return ajax_response(True, upload_key)
     else:
@@ -57,18 +77,31 @@ def upload_complete(uuid):
     """The location we send them to at the end of the upload."""
 
     # Get their files.
-    root = "uploadr/static/uploads/{}".format(uuid)
+    twjspath = app.TWJSrealmainpath+app.TWJSlocalpath+app.TWJSdata
+    root = twjspath+"/{}".format(uuid)
     if not os.path.isdir(root):
         return "Error: UUID not found!"
 
     files = []
+    json_file = ""
     for file in glob.glob("{}/*.*".format(root)):
         fname = file.split("/")[-1]
+        if ".json" in fname: json_file = fname
         files.append(fname)
+
+    print "root: "+ root
+    print "json_file: "+json_file
+    folder_file = "/".join( [app.TWJSdata,uuid,json_file] )
+    print "folder_file: "+folder_file
+    print " - - - - - - - "
+
+
 
     return render_template("files.html",
         uuid=uuid,
         files=files,
+        path=folder_file,
+        url=("http://localhost"+app.TWJSlocalpath),
     )
 
 

@@ -85,15 +85,16 @@ function doUpload() {
 
             // How'd it go?
             if (data.status === "error") {
-                // Uh-oh.
+                // // Uh-oh.
                 window.alert(data.msg);
+                // console.log("error ajax: "+data.msg)
                 $("#upload-form :input").removeAttr("disabled");
                 return;
-            }
-            else {
+            } else {
                 // Ok! Get the UUID.
                 var uuid = data.msg;
                 window.location = NEXT_URL + uuid;
+                // console.log("go to: "+(NEXT_URL + uuid))
             }
         },
     });

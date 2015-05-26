@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Trial Page</title>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+{% if array %}
+	{% for i in array %}
+	    <h3>{{ i }}</h3><br>
+	{% endfor %}
+{% else %}
+    <h3>nothing received</h3>
+{% endif %}
+
+</body>
+</html>
